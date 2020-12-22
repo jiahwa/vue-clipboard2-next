@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "vue": "^2.5.17",
-    "vue-clipboard2": "^0.2.1"
+    "vue-clipboard2-next": "^0.4.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.3",

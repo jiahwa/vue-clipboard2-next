@@ -1,3 +1,7 @@
+# 0.4.1
+
+- Add supportation for Vue 3, not Vue 2 any more
+
 # 0.3.1
 
 - Add TypeScript type definiation from @vlad-ro

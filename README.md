@@ -1,20 +1,21 @@
-# vue-clipboard2
+# vue-clipboard2-next
 
-A simple vuejs 2 binding for clipboard.js
+A simple vuejs 3 binding for clipboard.js
 
 ## Install
 
-`npm install --save vue-clipboard2` or use `dist/vue-clipboard.min.js` without webpack
+`npm install --save vue-clipboard2-next` or use `dist/vue-clipboard.min.js` without webpack
 
 ## Usage
 
 For vue-cli user:
 
 ```javascript
-import Vue from 'vue'
-import VueClipboard from 'vue-clipboard2'
+import {createApp} from 'vue'
+import VueClipboard from 'vue-clipboard2-next'
 
-Vue.use(VueClipboard)
+const app = createApp()
+app.use(VueClipboard)
 ```
 
 For standalone usage:
@@ -28,7 +29,7 @@ For standalone usage:
 ## I want to copy texts without a specific button!
 
 Yes, you can do it by using our new method: `this.$copyText`. See
-[sample2](https://github.com/Inndy/vue-clipboard2/blob/master/samples/sample2.html),
+[sample2](https://github.com/jiahwa/vue-clipboard2-next/blob/master/samples/sample2.html),
 where we replace the clipboard directives with a v-on directive.
 
 Modern browsers have some limitations like that you can't use `window.open` without a user interaction.
@@ -41,21 +42,22 @@ Before using this feature, read:
 
 ## It doesn't work with bootstrap modals
 
-See [clipboardjs](https://clipboardjs.com/#advanced-usage) document and [this pull request](https://github.com/Inndy/vue-clipboard2/pull/23), `container` option is available like this:
+See [clipboardjs](https://clipboardjs.com/#advanced-usage) document and [this pull request](https://github.com/jiahwa/vue-clipboard2-next/pull/23), `container` option is available like this:
 
 ```js
 let container = this.$refs.container
 this.$copyText("Text to copy", container)
 ```
 
-Or you can let `vue-clipboard2` set `container` to current element by doing this:
+Or you can let `vue-clipboard2-next` set `container` to current element by doing this:
 
 ```js
-import Vue from 'vue'
-import VueClipboard from 'vue-clipboard2'
+import {createApp} from 'vue'
+import VueClipboard from 'vue-clipboard2-next'
 
+const app = createApp()
 VueClipboard.config.autoSetContainer = true // add this line
-Vue.use(VueClipboard)
+app.use(VueClipboard)
 ```
 
 ## Sample
@@ -74,23 +76,24 @@ Vue.use(VueClipboard)
 </template>
 
 <script>
-new Vue({
-  el: '#app',
-  template: '#t',
-  data: function () {
-    return {
-      message: 'Copy These Text'
-    }
-  },
-  methods: {
-    onCopy: function (e) {
-      alert('You just copied: ' + e.text)
+  import {createApp, ref} from 'vue'
+
+  createApp({
+
+    template: '#t',
+
+    setup() {
+      const message = ref('Copy These Text')
+      const onCopy = e => alert('You just copied: ' + e.text)
+      const onError = e => alert('Failed to copy texts')
+
+      return {
+        message,
+        onCopy,
+        onError
+      }
     },
-    onError: function (e) {
-      alert('Failed to copy texts')
-    }
-  }
-})
+  }).mount('#app')
 </script>
 ```
 
@@ -107,26 +110,30 @@ new Vue({
   </template>
 
   <script>
-  new Vue({
-    el: '#app',
-    template: '#t',
-    data: function () {
-      return {
-        message: 'Copy These Text'
+    import {createApp, ref} from 'vue'
+
+    createApp({
+
+      template: '#t',
+      
+      setup() {
+        const message = ref('Copy These Text')
+        const doCopy = () => {
+          this.$copyText(message.value).then((e) => {
+            alert('Copied')
+            console.log(e)
+          }, (e) => {
+            alert('Can not copy')
+            console.log(e)
+          })
+        }
+
+        return {
+          message,
+          doCopy
+        }
       }
-    },
-    methods: {
-      doCopy: function () {
-        this.$copyText(this.message).then(function (e) {
-          alert('Copied')
-          console.log(e)
-        }, function (e) {
-          alert('Can not copy')
-          console.log(e)
-        })
-      }
-    }
-  })
+    }).mount('#app')
   </script>
 
 ```
@@ -144,4 +151,4 @@ please fire an issue for a feature request.
 
 ### License
 
-[MIT License](https://github.com/Inndy/vue-clipboard2/blob/master/LICENSE)
+[MIT License](https://github.com/jiahwa/vue-clipboard2-next/blob/master/LICENSE)
